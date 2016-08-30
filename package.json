@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/vujita/twitter-viewer/issues"
   },
-  "homepage": "https://github.com/vujita/twitter-viewer#readme"
+  "homepage": "https://github.com/vujita/twitter-viewer#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
 }

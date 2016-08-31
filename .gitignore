@@ -43,3 +43,6 @@ jspm_packages
 
 #envoirnment file to make my life easier son!
 .env
+
+#Dist
+dist

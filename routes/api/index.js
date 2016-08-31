@@ -5,8 +5,9 @@ import express from 'express';
 const router = express.Router();
 
 
-router.get('/recenttweets', (req, res)=> {
+router.get('/recenttweets/:username', (req, res)=> {
     res.json({
+        username:req.params.username,
         tweets: [{
             id: 'some id',
             tweet: 'some awesomeness'

@@ -40,3 +40,6 @@ jspm_packages
 
 #ide
 .idea
+
+#envoirnment file to make my life easier son!
+.env

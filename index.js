@@ -2,20 +2,29 @@
  * Created by vuthasone on 8/30/2016.
  */
 "use strict";
+import path from 'path';
 import express from 'express';
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 import routes from './routes';
 import dotenv from 'dotenv';
 import {setConfig as setTwitterCfg} from './utils/twitter';
+import webpack from 'webpack';
+import webpackMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import webpackConfig from './webpack.config';
+import rimraf from 'rimraf';
+
 //Load .env to process.env.*
 dotenv.config();
+
 //Pull values required from the .env file that are configurable
 const {
     TWITTER_CONSUMER_KEY,
     TWITTER_CONSUMER_SECRET,
     TWITTER_ACCESS_TOKEN,
-    TWITTER_ACCESS_TOKEN_SECRET
+    TWITTER_ACCESS_TOKEN_SECRET,
+    PRODUCTION,
+    PRODUCTION_WEBPACK_WATCH
 } = process.env;
 const SERVER_PORT = process.env.SERVER_PORT || 8080;
 console.log('Following Keys are loaded from twitter', {
@@ -38,17 +47,50 @@ if (!TWITTER_CONSUMER_KEY || !TWITTER_CONSUMER_SECRET
         access_token_secret: TWITTER_ACCESS_TOKEN_SECRET
     })
 }
-
 //Create web server
 let server = express();
 
-//Basic index path, this may change. I may not have enough time for my initial intention of server rendering
-server.get('/', function (req, res) {
-    const html = ReactDOMServer.renderToStaticMarkup(<h1>Hello World2 again</h1>);
-    res.send(html);
-});
 //Attach routes
 server.use('/', routes);
+
+//static files
+const compiler = webpack(webpackConfig);
+if (PRODUCTION) {
+    //clean public folder for a new build
+    rimraf.sync('public');
+    //Set public to be a static assets
+    server.use(express.static('public'));
+    const onCompile = (err,stats)=>{
+        if (err) {
+            console.error('Webpack error:', err);
+        } else {
+            console.log('webpack compiled');
+        }
+    };
+    if (PRODUCTION_WEBPACK_WATCH) {
+        compiler.watch({}, onCompile);
+    }else{
+        compiler.run(onCompile);
+    }
+
+} else {
+    //Dev
+    const middleware = webpackMiddleware(compiler, {
+        publicPath: webpackConfig.output.publicPath,
+        contentBase: 'src',
+        stats: {
+            colors: true,
+            hash: false,
+            timings: true,
+            chunks: false,
+            chunkModules: false,
+            modules: false
+        }
+    });
+
+    server.use(middleware);
+    server.use(webpackHotMiddleware(compiler));
+}
 //Launch off of configured port or default of 8080
 server.listen(SERVER_PORT, ()=> {
     console.log(`Example server listening on port ${SERVER_PORT}!`);

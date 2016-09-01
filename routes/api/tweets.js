@@ -17,6 +17,9 @@ export default router;
  */
 function fetchTweetsByUser(req, res) {
     let {screen_name} = req.params;
+    if (screen_name[0] !== '@') {
+        screen_name = `@${screen_name}`;
+    }
     getTweets(req.params)
         .then((tweets)=> {
             res.statusCode = 200;

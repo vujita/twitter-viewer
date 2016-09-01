@@ -2,6 +2,7 @@
  * Created by vnguyen on 9/1/16.
  */
 import React, {Component, PropTypes} from 'react';
+import {withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as tweetActions from '../actions/loadTweets';
@@ -13,6 +14,7 @@ const mapDispatchToProps = (dispatch)=>({
     actions: bindActionCreators(tweetActions, dispatch)
 });
 @connect(mapStateToProps, mapDispatchToProps)
+@withRouter
 export default class App extends Component {
     constructor(props) {
         super(props);
@@ -23,14 +25,18 @@ export default class App extends Component {
         if (nextProps.location.pathname !== this.props.location.pathname) {
             this.setState({
                 screen_name: ''
-            })
+            });
+            //I could do the fetch here, but it feels so lazy.
         }
     }
 
     onSearch() {
-        let {actions, history} = this.props;
-        history.push(this.state.screen_name);
-        actions.loadTweets(this.state.screen_name)
+        let {actions, router, params} = this.props,
+            {screen_name} = this.state;
+        if (params.screen_name !== screen_name) {
+            router.push(screen_name);
+            actions.fetchTweets(screen_name)
+        }
 
     }
 
@@ -49,12 +55,12 @@ export default class App extends Component {
 
     render() {
         let {appState, actions, params} = this.props;
-        console.log(this.props);
         return (
             <div>
                 <input type="textfield" value={this.state.screen_name || params.screen_name}
                        onChange={this.onChange.bind(this)}/>
-                <button onClick={this.onSearch.bind(this)}>Search
+                <button onClick={this.onSearch.bind(this)}
+                        disabled={!this.state.screen_name || this.state.screen_name===appState.userTweets.currentTwitterUser}>Search
                 </button>
                 <p>
                     {this.state.screen_name}

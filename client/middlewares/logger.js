@@ -13,6 +13,3 @@ const logger = store => next => action => {
     return result;
 }
 export default logger;
-function stringifyObj(o) {
-    return JSON.stringify(o, null, 2);
-}

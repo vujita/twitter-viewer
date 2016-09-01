@@ -9,6 +9,12 @@
     PRODUCTION=true/false compile assets to dist
     PRODUCTION_WEBPACK_WATCH=true/false to recompile webpack changes into file system
     
-To run project after creating .env file
+##To run project after creating .env file
     npm install
     npm run auto-start
+This will automatically run linting and jest for unit test.
+These unit test will include code coverage information that will be generated to the coverage folder, which is in .gitignore
+You can also run these separately
+
+    npm run lint
+    npm run test

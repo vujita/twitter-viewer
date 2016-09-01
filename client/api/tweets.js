@@ -1,7 +1,7 @@
 /**
  * Created by vnguyen on 9/1/16.
  */
-
+const $ = require('jquery');
 /**
  * A method to abstract fetching tweets by user
  * @param userName

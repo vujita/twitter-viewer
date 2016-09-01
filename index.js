@@ -15,10 +15,9 @@ const {
     TWITTER_CONSUMER_KEY,
     TWITTER_CONSUMER_SECRET,
     TWITTER_ACCESS_TOKEN,
-    TWITTER_ACCESS_TOKEN_SECRET,
-    PORT
+    TWITTER_ACCESS_TOKEN_SECRET
 } = process.env;
-
+const SERVER_PORT = process.env.SERVER_PORT || 8080;
 console.log('Following Keys are loaded from twitter', {
     TWITTER_CONSUMER_KEY,
     TWITTER_CONSUMER_SECRET,
@@ -29,7 +28,7 @@ console.log('Following Keys are loaded from twitter', {
 //Check if .env file was loaded with all needed
 if (!TWITTER_CONSUMER_KEY || !TWITTER_CONSUMER_SECRET
     || !TWITTER_ACCESS_TOKEN || !TWITTER_ACCESS_TOKEN_SECRET) {
-    throw new Exception('Unable to load .env file, or missing required variables');
+    throw new Error('Unable to load .env file, or missing required variables');
 } else {
     //Load util with keys
     setTwitterCfg({
@@ -51,6 +50,6 @@ server.get('/', function (req, res) {
 //Attach routes
 server.use('/', routes);
 //Launch off of configured port or default of 8080
-server.listen(PORT || 8080, function () {
-    console.log('Example server listening on port 3000!');
+server.listen(SERVER_PORT, ()=> {
+    console.log(`Example server listening on port ${SERVER_PORT}!`);
 });

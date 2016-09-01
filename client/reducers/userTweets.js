@@ -28,7 +28,7 @@ export default function (state = {}, action = {type: ''}) {
         case actionTypes.LOAD_TWEETS_BY_USER_FAILURE:
             state = {
                 currentTwitterUser: data.user,
-                tweets: null,
+                tweets: [],
                 err: data.err
             }
             break;

@@ -10,7 +10,7 @@ import {Router, Route, useRouterHistory, IndexRedirect} from 'react-router'
 import {syncHistoryWithStore} from 'react-router-redux'
 import createHashHistory from 'history/lib/createHashHistory'
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import App from './components/App'
+import App from './components/App';
 import {createStore} from './stores';
 import {actionTypes} from './constants';
 // Needed for onTouchTap

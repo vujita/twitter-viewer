@@ -44,5 +44,5 @@ jspm_packages
 #envoirnment file to make my life easier son!
 .env
 
-#Dist
-dist
+#Dist, I may change this later. I am building on server start now though
+public

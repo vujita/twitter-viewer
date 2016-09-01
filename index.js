@@ -2,7 +2,6 @@
  * Created by vuthasone on 8/30/2016.
  */
 "use strict";
-import path from 'path';
 import express from 'express';
 import React from 'react';
 import routes from './routes';
@@ -23,9 +22,9 @@ const {
     TWITTER_CONSUMER_SECRET,
     TWITTER_ACCESS_TOKEN,
     TWITTER_ACCESS_TOKEN_SECRET,
-    PRODUCTION,
     PRODUCTION_WEBPACK_WATCH
 } = process.env;
+const PRODUCTION = (process.env.PRODUCTION === 'true');
 const SERVER_PORT = process.env.SERVER_PORT || 8080;
 console.log('Following Keys are loaded from twitter', {
     TWITTER_CONSUMER_KEY,
@@ -55,12 +54,15 @@ server.use('/', routes);
 
 //static files
 const compiler = webpack(webpackConfig);
-if (PRODUCTION) {
+if (PRODUCTION === 'true') {
+    /**
+     * I chose to compile on the fly to make it very simple to run this in dev or prod mode and the build would be more abstracted
+     */
     //clean public folder for a new build
     rimraf.sync('public');
     //Set public to be a static assets
     server.use(express.static('public'));
-    const onCompile = (err,stats)=>{
+    const onCompile = (err, stats)=> {
         if (err) {
             console.error('Webpack error:', err);
         } else {
@@ -69,7 +71,7 @@ if (PRODUCTION) {
     };
     if (PRODUCTION_WEBPACK_WATCH) {
         compiler.watch({}, onCompile);
-    }else{
+    } else {
         compiler.run(onCompile);
     }
 
@@ -91,6 +93,7 @@ if (PRODUCTION) {
     server.use(middleware);
     server.use(webpackHotMiddleware(compiler));
 }
+
 //Launch off of configured port or default of 8080
 server.listen(SERVER_PORT, ()=> {
     console.log(`Example server listening on port ${SERVER_PORT}!`);

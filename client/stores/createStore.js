@@ -7,6 +7,11 @@ import loggerMiddleware from '../middlewares/logger';
 import crashReporter from '../middlewares/crashReporter';
 import fetchTweetsMiddleWare from '../middlewares/fetchTweets';
 import userTweets from '../reducers/userTweets';
+
+/**
+ * We want to export a method to create a store, so it will be quicker to do universal rendering, which I probably wont be able to get too
+ * @param initialState
+ */
 const createStore = (initialState = {})=>(
     makeStore(
         combineReducers({
@@ -17,6 +22,8 @@ const createStore = (initialState = {})=>(
         compose(
             applyMiddleware(loggerMiddleware, crashReporter, fetchTweetsMiddleWare),
             //Attaches dev tools to chrome extension if active, may add an additional condition
+            //http://zalmoxisus.github.io/redux-devtools-extension/
+            //Get one of these extensions
             window.devToolsExtension ? window.devToolsExtension() : f => f
         )
     )

@@ -3,6 +3,12 @@
  */
 import {actionTypes} from '../constants';
 
+/**
+ * Reducer for usersTweets
+ * @param state
+ * @param action
+ * @returns {{}}
+ */
 export default function (state = {}, action = {type: ''}) {
     const {type, data} = action;
     switch (type) {

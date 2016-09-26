@@ -1,9 +1,9 @@
 /**
  * Created by vnguyen on 9/1/16.
  */
-import userTweets from '../userTweets';
-import {fetchTweets, loadTweetsSuccess, loadTweetsFailure} from '../../actions/loadTweets'
-import {actionTypes} from '../../constants';
+import userTweets from "../userTweets";
+import {fetchTweets, loadTweetsSuccess, loadTweetsFailure} from "../../actions/loadTweets";
+import {actionTypes} from "../../constants";
 /**
  * Testing reducers is key to many things working
  */
@@ -37,13 +37,18 @@ describe('Testing userTweets reducer', ()=> {
         expect(newState.loading).toBeUndefined();
     });
     it('Test tweet failure', ()=> {
+        //noinspection JSAnnotator
         let currentTwitterUser = 'Test',
             orgState = {
                 currentTwitterUser,
                 loading: true
             },
-            err: [{message:'badStuff'}],
-            newState = userTweets(orgState, loadTweetsFailure(currentTwitterUser,err));
+            err: [
+                {
+                    message:'badStuff'
+                }
+                ],
+            newState = userTweets(orgState, loadTweetsFailure(currentTwitterUser, err));
         expect(newState.loading).toBeUndefined();
         expect(newState.err).toBe(err);
         expect(newState).to

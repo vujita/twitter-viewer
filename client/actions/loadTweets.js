@@ -18,7 +18,7 @@ export const getTweets = (userName) =>(
         retrieveTweets(userName).then((r)=> {
             dispatch(loadTweetsSuccess(r.screen_name, r.tweets));
         }).fail((err)=> {
-            dispatch(loadTweetsFailure(user, err.responseJSON));
+            dispatch(loadTweetsFailure(userName, err.responseJSON));
         });
     }
 )
